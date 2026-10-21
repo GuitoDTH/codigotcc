@@ -30,3 +30,5 @@ uint8_t ADXL_ADDR = 0x53;
 #define REG_DATA_FORMAT 0x31
 #define REG_DATAX0      0x32
 #define SCALE_G 0.0039f
+a
+teste
