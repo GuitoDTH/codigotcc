@@ -6,6 +6,7 @@ nn sei oq colocar aqui sksksksks
 // Bibliotecas Utilizadas
 #include <Arduino.h> // funções do Arduino no esp32
 #include <Wire.h> // Comunicação com o ADXL e o Display
+#include <Adafruit_ADXL345_U.h> //Biblioteca ADXL
 #include <WiFi.h> // Wifi do esp32
 #include <WebServer.h> // servidor do esp32
 #include <Adafruit_SSD1306.h>// driver do display
@@ -13,6 +14,7 @@ nn sei oq colocar aqui sksksksks
 #include <esp_task_wdt.h> // se o sistema acabar travando, é reiniciado
 #include <esp_system.h> // mostra pq reiniciou
 #include "driver/gpio.h" // controle de baixo nivel dos pinos
+#include <Adafruit_Sensor.h> //Biblioteca da Adafruit
 
 // Pinos
 #define pino_i2c_dado = 21; //pino de dados da com-i2c
@@ -23,12 +25,42 @@ nn sei oq colocar aqui sksksksks
 #define pino_rele_mot = 16; //pino pra acionar o motor de desligamento via relé
 
 // ADXL
-uint8_t ADXL_ADDR = 0x53;
-#define REG_DEVID       0x00
-#define REG_BW_RATE     0x2C
-#define REG_POWER_CTL   0x2D
-#define REG_DATA_FORMAT 0x31
-#define REG_DATAX0      0x32
-#define SCALE_G 0.0039f
-a
-teste
+Adafruit_ADXL345_Unified accel = Adafruit_ADXL345_Unified(); // Adxl objeto
+
+void setup() {
+ //parte do adxl
+  Serial.begin(9600);
+  if(!accel.begin()){ //se adxl não encontrado = erro
+    Serial.println("ADXL não encontrado");
+    while(1);
+  }
+}
+
+void ADXL(){
+
+sensors_event_t event; //detecta o movimento do ADXL
+accel.getEvent(&event);
+
+float x = event.acceleration.x;
+float y = event.acceleration.y;
+float z = event.acceleration.z;
+float total = sqrt(x*x + y*y + z*z);
+
+  Serial.print("X: ");
+  Serial.print(x);
+  Serial.print("X: ");
+  Serial.print(x);
+  Serial.print("X: ");
+  Serial.print(x);
+  Serial.print("Total: ");
+  Serial.print(total);
+  Serial.print("  ");
+  Serial.println("m/s^2");
+}
+
+void loop(){
+
+  ADXL();
+  delay(500);
+
+}
